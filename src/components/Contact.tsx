@@ -25,7 +25,9 @@ export default function Contact() {
                         </div>
 
                         <div className="pt-4">
-                            <button className="cursor-pointer bg-green-500 hover:bg-green-600 text-yellow-900 font-bold px-8 py-4 rounded-xl transition-colors flex items-center text-lg space-x-3">
+                            <button
+                                onClick={() => window.open('https://wa.me/5514981323913?text=Olá! Gostaria de fazer um pedido com vocês.', '_blank')}
+                                className="cursor-pointer bg-green-500 hover:bg-green-600 text-green-950 font-bold px-8 py-4 rounded-xl transition-colors flex items-center text-lg space-x-3">
                                 <FaWhatsapp className="text-3xl" />
                                 <span>Pedir pelo WhatsApp</span>
                             </button>

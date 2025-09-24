@@ -1,3 +1,5 @@
+import { FaShoppingCart } from "react-icons/fa"
+
 interface MenuItemProps {
     id: string
     name: string
@@ -41,9 +43,11 @@ export default function MenuItem({ id, name, description, price, image, category
 
                     <button
                         onClick={() => onAddToCart(id, name, parseFloat(price.replace('R$ ', '').replace(',', '.')), image || '')}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-yellow-900 px-4 py-2 rounded-xl font-semibold transition-colors"
+                        className="bg-yellow-500 hover:bg-yellow-600 text-yellow-900 px-4 py-2 rounded-xl font-semibold transition-colors cursor-pointer flex items-center gap-2"
                     >
                         Adicionar
+                        <FaShoppingCart size={16} />
+
                     </button>
                 </div>
             </div>
