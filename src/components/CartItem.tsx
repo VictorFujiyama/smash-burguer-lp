@@ -23,7 +23,7 @@ export default function CartItem({
         <div className="bg-yellow-800/30 rounded-xl p-3 sm:p-4 relative">
             <button
                 onClick={() => onRemoveItem(id)}
-                className="absolute top-2 right-2 text-red-400 hover:text-red-300"
+                className="absolute top-2 right-2 text-red-400 hover:text-red-300 cursor-pointer"
             >
                 <FaTrash size={14} />
             </button>
