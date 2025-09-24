@@ -65,4 +65,4 @@ npm run build
 - `npm run dev` - Servidor de desenvolvimento
 - `npm run build` - Build para produção
 - `npm run preview` - Preview do build
-- `npm run lint` - Verificar código
+- `npm run lint` - Verificar código# smash-burguer-lp
