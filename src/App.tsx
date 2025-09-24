@@ -37,12 +37,10 @@ export default function App() {
             }
         })
 
-        // Adicionar toast e animar carrinho
         const toastId = Date.now().toString()
         setToasts(prev => [...prev, { id: toastId, message: name, timestamp: Date.now() }])
         setCartAnimation(true)
 
-        // Resetar animação do carrinho
         setTimeout(() => setCartAnimation(false), 600)
     }
 
@@ -96,6 +94,7 @@ export default function App() {
             <Toast
                 toasts={toasts}
                 onRemoveToast={removeToast}
+                onOpenCart={() => setIsCartOpen(true)}
             />
         </div>
     )

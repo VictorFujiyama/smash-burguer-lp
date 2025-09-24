@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { FaCheck, FaTimes } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import { FaCheck, FaShoppingCart } from 'react-icons/fa'
 
 interface ToastItem {
     id: string
@@ -10,18 +10,60 @@ interface ToastItem {
 interface ToastProps {
     toasts: ToastItem[]
     onRemoveToast: (id: string) => void
+    onOpenCart?: () => void
 }
 
-export default function Toast({ toasts, onRemoveToast }: ToastProps) {
+export default function Toast({ toasts, onRemoveToast, onOpenCart }: ToastProps) {
+    const [toastTimestamps, setToastTimestamps] = useState<Map<string, number>>(new Map())
+
     useEffect(() => {
         toasts.forEach(toast => {
-            const timer = setTimeout(() => {
-                onRemoveToast(toast.id)
-            }, 2000)
+            if (!toastTimestamps.has(toast.id)) {
+                const timestamp = Date.now()
+                setToastTimestamps(prev => new Map(prev).set(toast.id, timestamp))
 
-            return () => clearTimeout(timer)
+                const timer = setTimeout(() => {
+                    onRemoveToast(toast.id)
+                    setToastTimestamps(prev => {
+                        const newMap = new Map(prev)
+                        newMap.delete(toast.id)
+                        return newMap
+                    })
+                }, 3000)
+
+                return () => clearTimeout(timer)
+            }
         })
-    }, [toasts, onRemoveToast])
+    }, [toasts, onRemoveToast, toastTimestamps])
+
+    const handleMouseEnter = () => {
+    }
+
+    const handleMouseLeave = (toastId: string) => {
+        const timestamp = toastTimestamps.get(toastId)
+        if (timestamp) {
+            const elapsed = Date.now() - timestamp
+            const remaining = 3000 - elapsed
+
+            if (remaining <= 0) {
+                onRemoveToast(toastId)
+                setToastTimestamps(prev => {
+                    const newMap = new Map(prev)
+                    newMap.delete(toastId)
+                    return newMap
+                })
+            } else {
+                setTimeout(() => {
+                    onRemoveToast(toastId)
+                    setToastTimestamps(prev => {
+                        const newMap = new Map(prev)
+                        newMap.delete(toastId)
+                        return newMap
+                    })
+                }, remaining)
+            }
+        }
+    }
 
     if (toasts.length === 0) return null
 
@@ -30,7 +72,13 @@ export default function Toast({ toasts, onRemoveToast }: ToastProps) {
             {toasts.map((toast, index) => (
                 <div
                     key={toast.id}
-                    className="bg-green-500 text-black px-6 py-4 rounded-xl shadow-lg flex items-center space-x-3 max-w-sm animate-slide-in"
+                    onClick={() => {
+                        onOpenCart?.()
+                        toasts.forEach(t => onRemoveToast(t.id))
+                    }}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={() => handleMouseLeave(toast.id)}
+                    className="bg-green-500 text-black p-4 pr-16 rounded-xl shadow-lg flex items-center space-x-3 max-w-sm animate-slide-in cursor-pointer hover:bg-green-600 transition-colors relative"
                     style={{
                         transform: `translateY(${index * 10}px)`,
                         zIndex: 50 - index
@@ -43,12 +91,10 @@ export default function Toast({ toasts, onRemoveToast }: ToastProps) {
                         <p className="font-semibold">Adicionado ao carrinho!</p>
                         <p className="text-sm text-black">{toast.message}</p>
                     </div>
-                    <button
-                        onClick={() => onRemoveToast(toast.id)}
-                        className="text-black font-bold hover:text-green-200 transition-colors"
-                    >
-                        <FaTimes />
-                    </button>
+                    <div className="absolute bottom-2 right-2 bg-green-600 rounded-full px-2 py-1 flex items-center space-x-1">
+                        <span className="text-white text-xs font-semibold">Abrir</span>
+                        <FaShoppingCart className="text-white text-xs" />
+                    </div>
                 </div>
             ))}
         </div>
