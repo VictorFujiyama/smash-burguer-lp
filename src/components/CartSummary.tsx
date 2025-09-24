@@ -34,7 +34,6 @@ export default function CartSummary({
     showCheckout,
     total,
     items,
-    formData,
     onConfirmOrder,
     onBack,
     onFinalizeOrder
